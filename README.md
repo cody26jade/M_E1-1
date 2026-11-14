@@ -622,13 +622,41 @@ docker rm codyssey-review
 - [x] Git 저장소 초기화
 - [x] GitHub 원격 저장소 연결
 - [x] 자동 보안 점검
-- [ ] 스크린샷 및 로그 수동 보안 점검
-- [ ] Git Add 및 Commit
+- [x] 스크린샷 및 로그 수동 보안 점검
+- [x] Git Add 및 Commit
 - [ ] GitHub Push
-- [ ] Public 저장소 확인
+- [x] Public 저장소 확인
 - [ ] 최종 제출 검증
 
 ---
 
 **2026 Codyssey AI All-in-One | M_E1-1**
+
+## 18. Git Add 및 Commit 수행 결과
+
+### 최초 Commit
+
+| 항목 | 결과 |
+|---|---|
+| Commit Hash | a3ad338 |
+| Commit Message | Initial commit: M_E1-1 mission |
+| Staged files | 31 |
+| Tracked files | 31 |
+| Insertions | 1185 |
+| Working tree clean | True |
+
+### 주요 명령어
+
+```powershell
+git add .
+git commit -m "Initial commit: M_E1-1 mission"
+git log -1 --oneline
+git status
+```
+
+### 실습 증빙
+
+![Git Add](screenshots/10-5-3_git_commit%281%29.png)
+
+![Git Commit](screenshots/10-5-3_git_commit%282%29.png)
 
