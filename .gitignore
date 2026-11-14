@@ -1,0 +1,21 @@
+# Environment and secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Python temporary files
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# IDE settings
+.vscode/
+.idea/
+
+# Windows temporary files
+Thumbs.db
+Desktop.ini
+*.tmp

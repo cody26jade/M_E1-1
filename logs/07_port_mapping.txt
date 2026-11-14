@@ -1,0 +1,5 @@
+﻿Port 30001 : HTTP 200
+Port 30002 : HTTP 200
+CONTAINER ID   IMAGE             COMMAND                   CREATED         STATUS         PORTS                     NAMES
+7f1f296fe05c   codyssey-web:v1   "/docker-entrypoint.??   4 seconds ago   Up 3 seconds   127.0.0.1:30002->80/tcp   codyssey-web-2
+7e14e6fea41d   codyssey-web:v1   "/docker-entrypoint.??   5 seconds ago   Up 4 seconds   127.0.0.1:30001->80/tcp   codyssey-web-1

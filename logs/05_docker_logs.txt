@@ -1,0 +1,304 @@
+﻿[?2004h]0;root@b703fa220da4: /root@b703fa220da4:/# 
+[?2004l
+[?2004h]0;root@b703fa220da4: /root@b703fa220da4:/# ^C[?2004l
+[?2004h[?2004l
+
+[?2004h]0;root@b703fa220da4: /root@b703fa220da4:/# ^C[?2004l
+[?2004h[?2004l
+
+[?2004h]0;root@b703fa220da4: /root@b703fa220da4:/# 
+Display all 570 possibilities? (y or n)
+!                        debconf-communicate      for                      gnupinky                 id                       nl                       sensible-browser         tset
+./                       debconf-copydb           free                     gnupr                    if                       nohup                    sensible-editor          tsort
+:                        debconf-escape           fsck                     gnuprintenv              in                       nologin                  sensible-pager           tty
+[                        debconf-set-selections   fsck.ext2                gnuprintf                infocmp                  nproc                    sensible-terminal        tune2fs
+[[                       debconf-show             fsck.ext3                gnuptx                   infotocap                nsenter                  seq                      type
+]]                       debugfs                  fsck.ext4                gnupwd                   initctl                  numfmt                   service                  typeset
+add-shell                declare                  fsfreeze                 gnureadlink              install                  od                       set                      tzselect
+agetty                   df                       fstab-decode             gnurealpath              installkernel            pager                    setarch                  uclampset
+alias                    diff                     fstrim                   gnurm                    invoke-rc.d              pam-auth-update          setpriv                  ulimit
+apt                      diff3                    function                 gnurmdir                 ionice                   pam_extrausers_chkpwd    setsid                   umask
+apt-cache                dir                      getconf                  gnuruncon                ipcmk                    pam_extrausers_update    setterm                  umount
+apt-cdrom                dircolors                getent                   gnuseq                   ipcrm                    pam_getenv               sh                       unalias
+apt-config               dirname                  getopt                   gnusha1sum               ipcs                     pam_namespace_helper     sha1sum                  uname
+apt-get                  dirs                     getopts                  gnusha224sum             ischroot                 pam_timestamp_check      sha224sum                uncompress
+apt-mark                 disown                   getty                    gnusha256sum             jobs                     partx                    sha256sum                unexpand
+arch                     dmesg                    gnu[                     gnusha384sum             join                     passwd                   sha3-224sum              uniq
+awk                      dnsdomainname            gnuarch                  gnusha512sum             kill                     paste                    sha3-256sum              unix_chkpwd
+b2sum                    do                       gnub2sum                 gnushred                 killall5                 pathchk                  sha3-384sum              unix_update
+badblocks                domainname               gnubase32                gnushuf                  l                        pebble                   sha3-512sum              unlink
+base32                   done                     gnubase64                gnusleep                 la                       perl                     sha384sum                unset
+base64                   dpkg                     gnubasename              gnusort                  ld.so                    perl5.40.1               sha3sum                  unshare
+basename                 dpkg-deb                 gnubasenc                gnusplit                 ldconfig                 pgrep                    sha512sum                until
+basenc                   dpkg-divert              gnucat                   gnustat                  ldd                      pidof                    shadowconfig             update-alternatives
+bash                     dpkg-maintscript-helper  gnuchcon                 gnustdbuf                let                      pidwait                  shake128sum              update-passwd
+bashbug                  dpkg-preconfigure        gnuchgrp                 gnustty                  link                     pinky                    shake256sum              update-rc.d
+bg                       dpkg-query               gnuchmod                 gnusum                   linux32                  pkill                    shift                    update-shells
+bind                     dpkg-realpath            gnuchown                 gnusync                  linux64                  pldd                     shopt                    uptime
+blkdiscard               dpkg-reconfigure         gnuchroot                gnutac                   ll                       pmap                     shred                    useradd
+blkid                    dpkg-split               gnucksum                 gnutail                  ln                       policy-rc.d              shuf                     userdel
+blockdev                 dpkg-statoverride        gnucomm                  gnutee                   local                    popd                     skill                    usermod
+break                    dpkg-trigger             gnucp                    gnutest                  locale                   pr                       slabtop                  users
+builtin                  du                       gnucsplit                gnutimeout               locale-check             printenv                 sleep                    vdir
+caller                   dumpe2fs                 gnucut                   gnutouch                 localedef                printf                   snice                    vigr
+captoinfo                e2freefrag               gnudate                  gnutr                    logger                   prlimit                  sort                     vipw
+case                     e2fsck                   gnudd                    gnutrue                  login                    ps                       source                   vmstat
+cat                      e2image                  gnudf                    gnutruncate              logname                  ptx                      split                    w
+cd                       e2label                  gnudir                   gnutsort                 logout                   pushd                    start-stop-daemon        wait
+chage                    e2mmpstatus              gnudircolors             gnutty                   logsave                  pwck                     stat                     wall
+chattr                   e2scrub                  gnudirname               gnuuname                 losetup                  pwconv                   stdbuf                   watch
+--More--
+[K
+chcon                    e2scrub_all              gnudu                    gnuunexpand              ls                       pwd                      stty                     wc
+--More--
+[K
+chfn                     e2undo                   gnuecho                  gnuuniq                  lsattr                   pwdx                     su                       whereis
+--More--
+[K
+chgpasswd                e4crypt                  gnuenv                   gnuunlink                lsblk                    pwhistory_helper         sulogin                  which
+--More--
+[K
+chgrp                    e4defrag                 gnuexpand                gnuusers                 lscpu                    pwunconv                 sum                      which.debianutils
+--More--
+[K
+chmod                    echo                     gnuexpr                  gnuvdir                  lsipc                    rbash                    suspend                  while
+--More--
+[K
+choom                    egrep                    gnufactor                gnuwc                    lslocks                  read                     swaplabel                who
+--More--
+[K
+chown                    elif                     gnufalse                 gnuwho                   lsns                     readarray                swapoff                  whoami
+--More--
+[K
+chpasswd                 else                     gnufmt                   gnuwhoami                man                      readlink                 swapon                   wipefs
+--More--
+[K
+chroot                   enable                   gnufold                  gnuyes                   mapfile                  readonly                 sync                     x86_64
+--More--
+[K
+chrt                     env                      gnugroups                gpasswd                  mawk                     readprofile              sysctl                   xargs
+--More--
+[K
+chsh                     esac                     gnuhead                  gpgv                     mcookie                  realpath                 tabs                     yes
+--More--
+[K
+cksum                    eval                     gnuhostid                grep                     md5sum                   remove-shell             tac                      ypdomainname
+--More--
+[K
+clear                    exec                     gnuid                    groupadd                 mkdir                    renice                   tail                     zcat
+--More--
+[K
+clear_console            exit                     gnuinstall               groupdel                 mke2fs                   reset                    tar                      zcmp
+--More--
+[K
+cmp                      expand                   gnujoin                  groupmod                 mkfifo                   resize2fs                tarcat                   zdiff
+--More--
+[K
+comm                     expiry                   gnulink                  groups                   mkfs                     return                   taskset                  zdump
+--More--
+[K
+command                  export                   gnuln                    grpck                    mkfs.ext2                rgrep                    tee                      zegrep
+--More--
+[K
+compgen                  expr                     gnulogname               grpconv                  mkfs.ext3                rm                       tempfile                 zfgrep
+--More--
+[K
+complete                 factor                   gnuls                    grpunconv                mkfs.ext4                rmdir                    test                     zforce
+--More--
+[K
+compopt                  faillock                 gnumd5sum                gunzip                   mkhomedir_helper         rmt                      then                     zgrep
+--More--
+[K
+continue                 fallocate                gnumkdir                 gzexe                    mklost+found             rmt-tar                  tic                      zic
+--More--
+[K
+coproc                   false                    gnumkfifo                gzip                     mknod                    rtcwake                  time                     zless
+--More--
+[K
+coreutils                fc                       gnumknod                 hardlink                 mkswap                   run-parts                timeout                  zmore
+--More--
+[K
+cp                       fg                       gnumktemp                hash                     mktemp                   runcon                   times                    znew
+--More--
+[K
+csplit                   fgrep                    gnumv                    hashsum                  more                     runuser                  tload                    zramctl
+--More--
+[K
+cut                      fi                       gnunice                  head                     mount                    savelog                  toe                      {
+--More--
+[K
+dash                     filefrag                 gnunl                    help                     mountpoint               script                   top                      }
+--More--
+[K
+date                     find                     gnunohup                 history                  mv                       scriptlive               touch                    
+--More--
+[K
+dd                       findfs                   gnunproc                 hostid                   namei                    scriptreplay             tput                     
+--More--
+[K
+deb-systemd-helper       findmnt                  gnunumfmt                hostname                 nawk                     sdiff                    tr                       
+--More--
+[K
+deb-systemd-invoke       flock                    gnuod                    i386                     newusers                 sed                      trap                     
+--More--
+[K
+debconf                  fmt                      gnupaste                 iconv                    nice                     select                   true                     
+--More--
+[K
+debconf-apt-progress     fold                     gnupathchk               iconvconfig              nisdomainname            select-editor            truncate                 
+]0;root@b703fa220da4: /root@b703fa220da4:/# 
+[?2004l
+[?2004h]0;root@b703fa220da4: /root@b703fa220da4:/# 
+[?2004l
+[?2004h]0;root@b703fa220da4: /root@b703fa220da4:/# 
+[?2004l
+[?2004h]0;root@b703fa220da4: /root@b703fa220da4:/# 
+[?2004l
+[?2004h]0;root@b703fa220da4: /root@b703fa220da4:/# 
+[?2004l
+[?2004h]0;root@b703fa220da4: /root@b703fa220da4:/# 
+[?2004l
+[?2004h]0;root@b703fa220da4: /root@b703fa220da4:/# 
+[?2004l
+[?2004h]0;root@b703fa220da4: /root@b703fa220da4:/# 
+[?2004l
+[?2004h]0;root@b703fa220da4: /root@b703fa220da4:/# 
+[?2004l
+[?2004h]0;root@b703fa220da4: /root@b703fa220da4:/# 
+[?2004l
+[?2004h]0;root@b703fa220da4: /root@b703fa220da4:/# 
+[?2004l
+[?2004h]0;root@b703fa220da4: /root@b703fa220da4:/# 
+[?2004l
+[?2004h]0;root@b703fa220da4: /root@b703fa220da4:/# 
+[?2004l
+[?2004h]0;root@b703fa220da4: /root@b703fa220da4:/# 
+[?2004l
+[?2004h]0;root@b703fa220da4: /root@b703fa220da4:/# 
+[?2004l
+[?2004h]0;root@b703fa220da4: /root@b703fa220da4:/# 
+[?2004l
+[?2004h]0;root@b703fa220da4: /root@b703fa220da4:/# 
+[?2004l
+[?2004h]0;root@b703fa220da4: /root@b703fa220da4:/# 
+[?2004l
+[?2004h]0;root@b703fa220da4: /root@b703fa220da4:/# 
+[?2004l
+[?2004h]0;root@b703fa220da4: /root@b703fa220da4:/# 
+[?2004l
+[?2004h]0;root@b703fa220da4: /root@b703fa220da4:/# 
+[?2004l
+[?2004h]0;root@b703fa220da4: /root@b703fa220da4:/# who   root# @b703fa220da4/                  whoami
+[?2004l
+root
+[?2004h]0;root@b703fa220da4: /root@b703fa220da4:/# hostname
+[?2004l
+b703fa220da4
+[?2004h]0;root@b703fa220da4: /root@b703fa220da4:/# paw  wd
+[?2004l
+/
+[?2004h]0;root@b703fa220da4: /root@b703fa220da4:/# ls -a 1a
+[?2004l
+[0m[01;34m.[0m
+[01;34m..[0m
+[01;32m.dockerenv[0m
+[01;34m.rock[0m
+[01;36mbin[0m
+[01;34mboot[0m
+[01;34mdev[0m
+[01;34metc[0m
+[01;34mhome[0m
+[01;36mlib[0m
+[01;36mlib64[0m
+[01;34mmedia[0m
+[01;34mmnt[0m
+[01;34mopt[0m
+[01;34mproc[0m
+[01;34mroot[0m
+[01;34mrun[0m
+[01;36msbin[0m
+[01;34msrv[0m
+[01;34msys[0m
+[30;42mtmp[0m
+[01;34musr[0m
+[01;34mvar[0m
+[?2004h]0;root@b703fa220da4: /root@b703fa220da4:/# bash
+[?2004l
+[?2004h]0;root@b703fa220da4: /root@b703fa220da4:/# [7mcat /etc/os-release[27mcat /etc/os-release
+[?2004l
+PRETTY_NAME="Ubuntu 26.04.1 LTS"
+NAME="Ubuntu"
+VERSION_ID="26.04"
+VERSION="26.04.1 LTS (Resolute Raccoon)"
+VERSION_CODENAME=resolute
+ID=ubuntu
+ID_LIKE=debian
+HOME_URL="https://www.ubuntu.com/"
+SUPPORT_URL="https://help.ubuntu.com/"
+BUG_REPORT_URL="https://bugs.launchpad.net/ubuntu/"
+PRIVACY_POLICY_URL="https://www.ubuntu.com/legal/terms-and-policies/privacy-policy"
+UBUNTU_CODENAME=resolute
+LOGO=ubuntu-logo
+[?2004h]0;root@b703fa220da4: /root@b703fa220da4:/# [7mwhoami[27mwhoami
+[?2004l
+root
+[?2004h]0;root@b703fa220da4: /root@b703fa220da4:/# [7mecho "Hello Codyssey M_E1-1"[27mecho "Hello Codyssey M_E1-1"
+[?2004l
+Hello Codyssey M_E1-1
+[?2004h]0;root@b703fa220da4: /root@b703fa220da4:/# [Kwxit[1P[1@e
+[?2004l
+exit
+[?2004h]0;root@b703fa220da4: /root@b703fa220da4:/# exit
+[?2004l
+exit
+[?2004h]0;root@b703fa220da4: /root@b703fa220da4:/# 
+[K
+]0;root@b703fa220da4: /root@b703fa220da4:/# 
+[K
+]0;root@b703fa220da4: /root@b703fa220da4:/# cat /tmp/mission.txt
+[?2004l
+cat: /tmp/mission.txt: No such file or directory
+[?2004h]0;root@b703fa220da4: /root@b703fa220da4:/# [7mecho "My first Docker container" > /tmp/mission.txt[27m
+]0;root@b703fa220da4: /root@b703fa220da4:/# echo "My first Docker container" > /tmp/mission.txt
+[?2004l
+[?2004h]0;root@b703fa220da4: /root@b703fa220da4:/# [K[7mcat /tmp/mission.txt[27mcat /tmp/mission.txt
+[?2004l
+My first Docker container
+[?2004h]0;root@b703fa220da4: /root@b703fa220da4:/# [7mls -l /tmp/mission.txt[27mls -l /tmp/mission.txt
+[?2004l
+-rw-r--r-- 1 root root 26 Nov 14 04:58 /tmp/mission.txt
+[?2004h]0;root@b703fa220da4: /root@b703fa220da4:/# wxit
+[?2004l
+bash: wxit: command not found
+[?2004h]0;root@b703fa220da4: /root@b703fa220da4:/# exit
+[?2004l
+exit
+[?2004h]0;root@b703fa220da4: /root@b703fa220da4:/# 
+[K
+]0;root@b703fa220da4: /root@b703fa220da4:/# 
+[K
+]0;root@b703fa220da4: /root@b703fa220da4:/# cat /tmp/mission.txt
+[?2004l
+My first Docker container
+[?2004h]0;root@b703fa220da4: /root@b703fa220da4:/# 
+[?2004l
+[?2004h]0;root@b703fa220da4: /root@b703fa220da4:/# dasf    exit
+[?2004l
+exit
+[?2004h]0;root@b703fa220da4: /root@b703fa220da4:/# 
+[K
+]0;root@b703fa220da4: /root@b703fa220da4:/# 
+[K
+]0;root@b703fa220da4: /root@b703fa220da4:/# [?2004h]0;root@b703fa220da4: /root@b703fa220da4:/# [?2004h]0;root@b703fa220da4: /root@b703fa220da4:/# 
+[K
+]0;root@b703fa220da4: /root@b703fa220da4:/# 
+[K
+]0;root@b703fa220da4: /root@b703fa220da4:/# 
+[K
+]0;root@b703fa220da4: /root@b703fa220da4:/# echo "[7] Attach & File Persistence"
+[?2004l
+[7] Attach & File Persistence
+[?2004h]0;root@b703fa220da4: /root@b703fa220da4:/# [Kcat /tmp/mission.txt
+[?2004l
+My first Docker container
+[?2004h]0;root@b703fa220da4: /root@b703fa220da4:/# 

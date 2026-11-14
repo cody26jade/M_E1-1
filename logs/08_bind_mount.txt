@@ -1,0 +1,5 @@
+﻿Before HTTP: 200
+After HTTP: 200
+Original container unchanged: True
+Bind Mount updated: True
+bind / C:\2026Codyssey_AllInOne\M_E1-1\app -> /usr/share/nginx/html / RW=false

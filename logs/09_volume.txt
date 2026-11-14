@@ -1,0 +1,6 @@
+﻿Volume: codyssey-data
+Container 1: Removed
+Container 2: Created
+Recovered data: Codyssey Volume Persistence Test
+Data preserved: True
+Name: codyssey-data / Driver: local / Mountpoint: /var/lib/docker/volumes/codyssey-data/_data
