@@ -660,3 +660,218 @@ git status
 
 ![Git Commit](screenshots/10-5-3_git_commit%282%29.png)
 
+
+## 19. GitHub 인증 오류 해결
+
+### 발생 오류
+
+GitHub Push 과정에서 HTTP 403 오류가 발생하였다.
+
+### 원인
+
+기존 개인 GitHub 계정의 인증 정보가 사용되어
+교육용 GitHub 저장소에 대한 쓰기 권한이 없었다.
+
+Public 저장소는 누구나 읽을 수 있지만
+쓰기 권한은 별도로 필요하다.
+
+### 해결 방법
+
+VS Code의 GitHub 로그인 계정을 정리하고
+현재 프로젝트의 Git 인증 계정을 설정하였다.
+
+```powershell
+git config --local credential.https://github.com.username cody26jade
+git config --local credential.https://github.com.useHttpPath true
+git push -u origin main
+```
+
+브라우저 인증을 완료한 후 Push에 성공하였다.
+
+### 검증 결과
+
+- GitHub Push: 성공
+- Local / Remote Commit 일치: True
+- GitHub 저장소 공개 상태: Public
+- Working tree: clean
+
+
+## 20. 포트 충돌 오류 해결
+
+### 발생 오류
+
+재현성 검증용 컨테이너 실행 중
+30003 포트 충돌이 발생하였다.
+
+```text
+Bind for 127.0.0.1:30003 failed:
+port is already allocated
+```
+
+### 원인
+
+기존 Bind Mount 실습용 컨테이너인
+codyssey-bind가 30003 포트를 사용하고 있었다.
+
+### 해결 방법
+
+기존 컨테이너를 중지하지 않고
+Docker의 자동 포트 할당 기능을 사용하였다.
+
+```powershell
+docker ps
+Get-NetTCPConnection -LocalPort 30003 -State Listen
+docker run -d --name review-test -p 127.0.0.1::80 codyssey-review:20261114-165542
+docker port review-test 80/tcp
+```
+
+위 명령어의 review-test는 실행 방법을 설명하기 위한 예시 이름이다.
+
+### 실제 검증 결과
+
+| 컨테이너 | 호스트 포트 |
+|---|---:|
+| codyssey-web-1 | 30001 |
+| codyssey-web-2 | 30002 |
+| codyssey-bind | 30003 |
+| codyssey-review-fix-20261114-165754 | 53783 |
+
+자동 할당 포트는 실행 환경에 따라 달라질 수 있다.
+
+
+## 21. 최종 재현성 검증
+
+GitHub 공개 저장소를 별도의 임시 폴더에 복제하고
+Docker 이미지를 다시 빌드하여 웹 서버를 실행하였다.
+
+### 검증 결과
+
+| 검증 항목 | 결과 |
+|---|---|
+| GitHub Clone | PASS |
+| Required Files | PASS |
+| Docker Image Build | PASS |
+| NGINX Configuration | PASS |
+| Automatic Port Allocation | PASS |
+| Container Running | PASS |
+| HTTP Status 200 | PASS |
+| HTML SHA256 Match | PASS |
+
+### 실제 검증 환경
+
+- GitHub Commit: 6947c22
+- Docker Image: codyssey-review:20261114-165542
+- Automatically Assigned Port: 53783
+- HTTP Status: 200
+- HTML Content Matched: True
+
+원본 HTML 파일과 웹 서버에서 다운로드한 HTML 파일의
+SHA256 해시값을 비교하여 파일 내용의 동일성을 확인하였다.
+
+이번 검증은 동일 PC의 별도 복제 폴더에서 수행하였다.
+
+
+## 22. 최종 수행 결과
+
+### 미션 수행 체크리스트
+
+- [x] 개발 환경 구축
+- [x] Linux 기본 명령어 실습
+- [x] Linux 파일 및 폴더 권한 실습
+- [x] Docker 기본 실행
+- [x] Docker 컨테이너 생명주기 실습
+- [x] Docker 이미지 및 컨테이너 관리
+- [x] Dockerfile 작성 및 이미지 빌드
+- [x] NGINX 웹 서버 구축
+- [x] Port Mapping 실습
+- [x] Bind Mount 실습
+- [x] Docker Volume 영속성 검증
+- [x] Git 저장소 초기화
+- [x] Git Add 및 Commit
+- [x] GitHub Public 저장소 업로드
+- [x] 오류 원인 분석 및 해결
+- [x] GitHub Clone 및 재현성 검증
+- [x] HTTP 응답 및 HTML 무결성 검증
+- [x] 최종 증빙 파일 추가 Commit 및 Push
+
+### 제출 저장소
+
+https://github.com/cody26jade/M_E1-1
+
+### 학습 결과
+
+Linux, Docker, NGINX, Git 및 GitHub를 활용하여
+개발 환경을 직접 구축하고 운영하는 과정을 학습하였다.
+
+실습 중 발생한 오류를 분석하고 해결하면서
+개발 환경의 구성 원리와 문제 해결 방법을 이해하였다.
+
+향후 제조 현장의 진동 데이터 분석 및 AI Agent 개발에
+이번 미션에서 구축한 개발 환경을 활용할 예정이다.
+
+
+## 23. 실습 증빙 자료
+
+현재 프로젝트에 실제로 저장된 스크린샷을 기준으로 정리하였다.
+
+일부 오류 해결 과정은 별도의 화면 캡처 없이 진행하였으며,
+해당 내용은 본문의 오류 원인 및 해결 방법에 기록하였다.
+
+- 저장된 스크린샷: 25개
+
+| No. | 증빙 파일 |
+|---:|---|
+| 1 | [01. Development Environment.png](screenshots/01.%20Development%20Environment.png) |
+| 2 | [02_linux_permission.png](screenshots/02_linux_permission.png) |
+| 3 | [03_docker_basic.png](screenshots/03_docker_basic.png) |
+| 4 | [04_docker_lifecycle.png](screenshots/04_docker_lifecycle.png) |
+| 5 | [05_docker_operation.png](screenshots/05_docker_operation.png) |
+| 6 | [06_docker_build.png](screenshots/06_docker_build.png) |
+| 7 | [07_error_connection_refused.png](screenshots/07_error_connection_refused.png) |
+| 8 | [07_port_mapping.png](screenshots/07_port_mapping.png) |
+| 9 | [07_web_browser.png](screenshots/07_web_browser.png) |
+| 10 | [08_bind_mount.png](screenshots/08_bind_mount.png) |
+| 11 | [09_error_name_conflict.png](screenshots/09_error_name_conflict.png) |
+| 12 | [09_error_resolved.png](screenshots/09_error_resolved.png) |
+| 13 | [10-1_git_environment.png](screenshots/10-1_git_environment.png) |
+| 14 | [10-2_project_organization.png](screenshots/10-2_project_organization.png) |
+| 15 | [10-3_readme_creation.png](screenshots/10-3_readme_creation.png) |
+| 16 | [10-4_git_initialization.png](screenshots/10-4_git_initialization.png) |
+| 17 | [10-4-2_github_remote.png](screenshots/10-4-2_github_remote.png) |
+| 18 | [10-5-1_security_check.png](screenshots/10-5-1_security_check.png) |
+| 19 | [10-5-2_readme_final.png](screenshots/10-5-2_readme_final.png) |
+| 20 | [10-5-3_git_commit(1).png](screenshots/10-5-3_git_commit(1).png) |
+| 21 | [10-5-3_git_commit(2).png](screenshots/10-5-3_git_commit(2).png) |
+| 22 | [10-5-4_github_public.png](screenshots/10-5-4_github_public.png) |
+| 23 | [10-5-4_github_push.png](screenshots/10-5-4_github_push.png) |
+| 24 | [10-6-1_reproduction_test.png](screenshots/10-6-1_reproduction_test.png) |
+| 25 | [10-6-1_review_browser.png](screenshots/10-6-1_review_browser.png) |
+
+### 추가 실습 증빙 이미지
+
+#### 10-3_readme_creation
+
+![10-3_readme_creation](screenshots/10-3_readme_creation.png)
+
+#### 10-5-2_readme_final
+
+![10-5-2_readme_final](screenshots/10-5-2_readme_final.png)
+
+#### 10-5-4_github_public
+
+![10-5-4_github_public](screenshots/10-5-4_github_public.png)
+
+#### 10-5-4_github_push
+
+![10-5-4_github_push](screenshots/10-5-4_github_push.png)
+
+#### 10-6-1_reproduction_test
+
+![10-6-1_reproduction_test](screenshots/10-6-1_reproduction_test.png)
+
+#### 10-6-1_review_browser
+
+![10-6-1_review_browser](screenshots/10-6-1_review_browser.png)
+
+
+
