@@ -1,0 +1,125 @@
+﻿CODYSSEY MISSION REPORT SYSTEM
+M_E1-1 R02 - Linux File Operations
+Date: 2026-11-14 20:42:22
+
+01. Linux Script Verification
+
+> Get-Item ".\scripts\R02_linux_file_operations.sh" |
+        Select-Object Name, Length
+
+Name                         Length
+----                         ------
+R02_linux_file_operations.sh   1678
+Failed: False
+
+02. Execute Linux File Operations
+
+> $scriptDir = (Resolve-Path ".\scripts").Path
+
+    docker run --rm --mount "type=bind,source=$scriptDir,target=/scripts,readonly" ubuntu:latest bash /scripts/R02_linux_file_operations.sh
+docker : + pwd
+위치 줄:14 문자:5
++     docker run --rm --mount "type=bind,source=$scriptDir,target=/scri ...
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (+ pwd:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
++ set +x
++ mkdir -p /tmp/codyssey-r02/source
+========================================
+M_E1-1 R02 - Linux File Operations
+========================================
+
+[01] Current directory
+/
+
+[02] Create directories
++ mkdir -p /tmp/codyssey-r02/target
++ cd /tmp/codyssey-r02
++ ls -ld source target
+drwxr-xr-x 2 root root 4096 Nov 14 11:42 source
+drwxr-xr-x 2 root root 4096 Nov 14 11:42 target
++ set +x
++ touch source/mission.txt
+
+[03] Create a file
++ ls -l source/mission.txt
+-rw-r--r-- 1 root root 0 Nov 14 11:42 source/mission.txt
++ set +x
++ echo 'Codyssey Linux File Operation Test'
+
+[04] Write and read file contents
++ cat source/mission.txt
+Codyssey Linux File Operation Test
+
+[05] Copy a file
++ set +x
++ cp source/mission.txt target/copy.txt
++ ls -l source/mission.txt target/copy.txt
+-rw-r--r-- 1 root root 35 Nov 14 11:42 source/mission.txt
+-rw-r--r-- 1 root root 35 Nov 14 11:42 target/copy.txt
++ cmp source/mission.txt target/copy.txt
++ set +x
++ mv source/mission.txt target/moved.txt
+PASS: Copied file contents are identical
+
+[06] Move and rename a file
++ ls -la source
+total 8
+drwxr-xr-x 2 root root 4096 Nov 14 11:42 .
+drwxr-xr-x 4 root root 4096 Nov 14 11:42 ..
++ ls -l target/moved.txt
+-rw-r--r-- 1 root root 35 Nov 14 11:42 target/moved.txt
++ test '!' -e source/mission.txt
++ test -f target/moved.txt
++ set +x
++ rm target/copy.txt
+PASS: File moved successfully
+
+[07] Delete files
++ rm target/moved.txt
++ ls -la target
+total 8
+drwxr-xr-x 2 root root 4096 Nov 14 11:42 .
+drwxr-xr-x 4 root root 4096 Nov 14 11:42 ..
++ test '!' -e target/copy.txt
++ test '!' -e target/moved.txt
++ set +x
++ rmdir source target
+PASS: Files deleted successfully
+
+[08] Delete empty directories
++ ls -la
+total 8
+drwxr-xr-x 2 root root 4096 Nov 14 11:42 .
+drwxrwxrwt 1 root root 4096 Nov 14 11:42 ..
++ test '!' -d source
++ test '!' -d target
+PASS: Directories deleted successfully
+
+[09] Final cleanup
++ set +x
++ cd /tmp
++ rmdir /tmp/codyssey-r02
+
+========================================
+PASS: ALL LINUX FILE OPERATIONS COMPLETED
+========================================
++ test '!' -e /tmp/codyssey-r02
++ set +x
+Failed: False
+
+03. Existing Containers Verification
+
+> docker ps -a --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
+NAMES                                 STATUS                     PORTS
+codyssey-review-fix-20261114-165754   Up 4 hours                 127.0.0.1:53783->80/tcp
+codyssey-review-20261114-165542       Created                    
+codyssey-volume-2                     Exited (0) 5 hours ago     
+codyssey-bind                         Up 5 hours                 127.0.0.1:30003->80/tcp
+codyssey-web-2                        Up 5 hours                 127.0.0.1:30002->80/tcp
+codyssey-web-1                        Up 5 hours                 127.0.0.1:30001->80/tcp
+confident_pasteur                     Exited (137) 6 hours ago   
+sharp_williamson                      Exited (0) 7 hours ago
+Failed: False
+

@@ -1,0 +1,173 @@
+﻿CODYSSEY MISSION REPORT SYSTEM
+M_E1-1 R09 - Final Evidence Inventory
+Date: 2026-11-14 20:57:47
+
+01. Required Revision Logs
+
+> $required = @(
+        "logs/R02_linux_file_operations.txt",
+        "logs/R03_linux_permissions.txt",
+        "logs/R04_docker_basic_commands.txt",
+        "logs/R05_docker_advanced_verification.txt",
+        "logs/R06_git_project_paths.txt",
+        "logs/R06B_linux_paths_verified.txt",
+        "logs/R08_troubleshooting_verification.txt"
+    )
+
+    foreach ($file in $required) {
+
+        $item = Get-Item -LiteralPath $file -ErrorAction Stop
+
+        "PASS: $file | $($item.Length) bytes"
+    }
+PASS: logs/R02_linux_file_operations.txt | 3922 bytes
+PASS: logs/R03_linux_permissions.txt | 4693 bytes
+PASS: logs/R04_docker_basic_commands.txt | 5845 bytes
+PASS: logs/R05_docker_advanced_verification.txt | 14226 bytes
+PASS: logs/R06_git_project_paths.txt | 4868 bytes
+PASS: logs/R06B_linux_paths_verified.txt | 4519 bytes
+PASS: logs/R08_troubleshooting_verification.txt | 8840 bytes
+Failed: False
+
+02. Required Linux Scripts
+
+> $required = @(
+        "scripts/R02_linux_file_operations.sh",
+        "scripts/R03_linux_permissions.sh",
+        "scripts/R06_linux_paths.sh"
+    )
+
+    foreach ($file in $required) {
+
+        $item = Get-Item -LiteralPath $file -ErrorAction Stop
+
+        "PASS: $file | $($item.Length) bytes"
+    }
+PASS: scripts/R02_linux_file_operations.sh | 1678 bytes
+PASS: scripts/R03_linux_permissions.sh | 2528 bytes
+PASS: scripts/R06_linux_paths.sh | 1434 bytes
+Failed: False
+
+03. Git Identity Verification
+
+> $name = git config user.name
+
+    if ($LASTEXITCODE -ne 0 -or -not $name) {
+        throw "Git user.name is not configured."
+    }
+
+    $email = git config user.email
+
+    if ($LASTEXITCODE -ne 0 -or -not $email) {
+        throw "Git user.email is not configured."
+    }
+
+    "GIT USER NAME: $name"
+    "GIT USER EMAIL: Configured (value withheld)"
+    "PASS: Git identity configured"
+GIT USER NAME: cody26jade
+GIT USER EMAIL: Configured (value withheld)
+PASS: Git identity configured
+Failed: False
+
+04. Original Docker Build Command
+
+> Select-String -Path ".\README.md" `
+        -Pattern "docker build -t codyssey-web:v1" |
+        Select-Object -First 1 -ExpandProperty Line
+
+    Get-Content ".\Dockerfile"
+docker build -t codyssey-web:v1 .
+FROM nginx:alpine
+
+COPY app/index.html /usr/share/nginx/html/index.html
+
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]
+Failed: False
+
+05. Screenshot Inventory
+
+> $files = @(Get-ChildItem ".\screenshots" -File -Filter "*.png")
+
+    "SCREENSHOT COUNT: $($files.Count)"
+
+    $files |
+        Select-Object Name |
+        Format-Table -AutoSize
+SCREENSHOT COUNT: 26
+
+Name                           
+----                           
+01. Development Environment.png
+02_linux_permission.png        
+03_docker_basic.png            
+04_docker_lifecycle.png        
+05_docker_operation.png        
+06_docker_build.png            
+07_error_connection_refused.png
+07_port_mapping.png            
+07_web_browser.png             
+08_bind_mount.png              
+09_error_name_conflict.png     
+09_error_resolved.png          
+10-1_git_environment.png       
+10-2_project_organization.png  
+10-3_readme_creation.png       
+10-4-2_github_remote.png       
+10-4_git_initialization.png    
+10-5-1_security_check.png      
+10-5-2_readme_final.png        
+10-5-3_git_commit(1).png       
+10-5-3_git_commit(2).png       
+10-5-4_github_public.png       
+10-5-4_github_push.png         
+10-6-1_reproduction_test.png   
+10-6-1_review_browser.png      
+10-6-2_readme_final.png
+Failed: False
+
+06. Log Inventory
+
+> $files = @(Get-ChildItem ".\logs" -File)
+
+    "LOG COUNT: $($files.Count)"
+
+    $files |
+        Select-Object Name, Length |
+        Format-Table -AutoSize
+LOG COUNT: 14
+
+Name                                 Length
+----                                 ------
+01_docker_info.txt                     3696
+05_docker_logs.txt                    19361
+06_docker_build.txt                   11330
+06_nginx_test.txt                      2464
+07_port_mapping.txt                     434
+08_bind_mount.txt                       180
+09_volume.txt                           237
+R02_linux_file_operations.txt          3922
+R03_linux_permissions.txt              4693
+R04_docker_basic_commands.txt          5845
+R05_docker_advanced_verification.txt  14226
+R06B_linux_paths_verified.txt          4519
+R06_git_project_paths.txt              4868
+R08_troubleshooting_verification.txt   8840
+Failed: False
+
+07. Git Working Tree
+
+> git status --short --branch
+## main...origin/main
+?? logs/R02_linux_file_operations.txt
+?? logs/R03_linux_permissions.txt
+?? logs/R04_docker_basic_commands.txt
+?? logs/R05_docker_advanced_verification.txt
+?? logs/R06B_linux_paths_verified.txt
+?? logs/R06_git_project_paths.txt
+?? logs/R08_troubleshooting_verification.txt
+?? scripts/
+Failed: False
+

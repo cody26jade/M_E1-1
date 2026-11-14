@@ -1,0 +1,142 @@
+﻿CODYSSEY MISSION REPORT SYSTEM
+M_E1-1 R03 - Linux Permissions
+Date: 2026-11-14 20:44:11
+
+01. Permission Script Verification
+
+> Get-Item ".\scripts\R03_linux_permissions.sh" |
+        Select-Object Name, Length
+
+Name                     Length
+----                     ------
+R03_linux_permissions.sh   2528
+Failed: False
+
+02. Execute Linux Permission Tests
+
+> $scriptDir = (Resolve-Path ".\scripts").Path
+
+    docker run --rm --mount "type=bind,source=$scriptDir,target=/scripts,readonly" ubuntu:latest bash /scripts/R03_linux_permissions.sh
+========================================
+M_E1-1 R03 - Linux File Permissions
+========================================
+
+[01] Create test directory and file
++ mkdir -p /tmp/codyssey-r03
++ cd /tmp/codyssey-r03
++ printf '#!/bin/bash\n echo "PASS: Script executed successfully"\n'
++ ls -l permission_test.sh
+-rw-r--r-- 1 root root 55 Nov 14 11:44 permission_test.sh
++ set +x
+
+[02] Permission 644
+Owner: rw- / Group: r-- / Others: r--
++ chmod 644 permission_test.sh
++ ls -l permission_test.sh
+-rw-r--r-- 1 root root 55 Nov 14 11:44 permission_test.sh
++ stat -c '%a %A %n' permission_test.sh
+644 -rw-r--r-- permission_test.sh
+++ stat -c %a permission_test.sh
++ test 644 = 644
++ set +x
+PASS: chmod 644 verified
+
+[03] Permission 755
+Owner: rwx / Group: r-x / Others: r-x
++ ls -l permission_test.sh
+-rw-r--r-- 1 root root 55 Nov 14 11:44 permission_test.sh
++ chmod 755 permission_test.sh
++ ls -l permission_test.sh
+-rwxr-xr-x 1 root root 55 Nov 14 11:44 permission_test.sh
++ stat -c '%a %A %n' permission_test.sh
+755 -rwxr-xr-x permission_test.sh
+++ stat -c %a permission_test.sh
++ test 755 = 755
++ ./permission_test.sh
+PASS: Script executed successfully
++ set +x
+PASS: chmod 755 verified
+
+[04] Permission 600
+Owner: rw- / Group: --- / Others: ---
++ ls -l permission_test.sh
+-rwxr-xr-x 1 root root 55 Nov 14 11:44 permission_test.sh
++ chmod 600 permission_test.sh
++ ls -l permission_test.sh
+-rw------- 1 root root 55 Nov 14 11:44 permission_test.sh
++ stat -c '%a %A %n' permission_test.sh
+600 -rw------- permission_test.sh
+++ stat -c %a permission_test.sh
++ test 600 = 600
++ set +x
+PASS: chmod 600 verified
+
+[05] Symbolic permission u+x
+Add execute permission for owner
++ ls -l permission_test.sh
+-rw------- 1 root root 55 Nov 14 11:44 permission_test.sh
++ chmod u+x permission_test.sh
++ ls -l permission_test.sh
+-rwx------ 1 root root 55 Nov 14 11:44 permission_test.sh
++ stat -c '%a %A %n' permission_test.sh
+700 -rwx------ permission_test.sh
+++ stat -c %a permission_test.sh
++ test 700 = 700
++ ./permission_test.sh
+PASS: Script executed successfully
++ set +x
+PASS: chmod u+x verified
+
+[06] Symbolic permission g+rx,o+rx
+Add read and execute permission for group and others
++ ls -l permission_test.sh
+-rwx------ 1 root root 55 Nov 14 11:44 permission_test.sh
++ chmod g+rx,o+rx permission_test.sh
++ ls -l permission_test.sh
+-rwxr-xr-x 1 root root 55 Nov 14 11:44 permission_test.sh
++ stat -c '%a %A %n' permission_test.sh
+755 -rwxr-xr-x permission_test.sh
+++ stat -c %a permission_test.sh
++ test 755 = 755
++ set +x
+PASS: Symbolic permission verified
+
+[07] Remove execute permission
++ ls -l permission_test.sh
+-rwxr-xr-x 1 root root 55 Nov 14 11:44 permission_test.sh
++ chmod a-x permission_test.sh
++ ls -l permission_test.sh
+-rw-r--r-- 1 root root 55 Nov 14 11:44 permission_test.sh
++ stat -c '%a %A %n' permission_test.sh
+644 -rw-r--r-- permission_test.sh
+++ stat -c %a permission_test.sh
++ test 644 = 644
++ set +x
+PASS: Execute permission removed
+
+[08] Final cleanup
++ rm permission_test.sh
++ cd /tmp
++ rmdir /tmp/codyssey-r03
++ test '!' -e /tmp/codyssey-r03
++ set +x
+
+========================================
+PASS: ALL LINUX PERMISSION TESTS COMPLETED
+========================================
+Failed: False
+
+03. Existing Containers Verification
+
+> docker ps -a --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
+NAMES                                 STATUS                     PORTS
+codyssey-review-fix-20261114-165754   Up 4 hours                 127.0.0.1:53783->80/tcp
+codyssey-review-20261114-165542       Created                    
+codyssey-volume-2                     Exited (0) 5 hours ago     
+codyssey-bind                         Up 5 hours                 127.0.0.1:30003->80/tcp
+codyssey-web-2                        Up 5 hours                 127.0.0.1:30002->80/tcp
+codyssey-web-1                        Up 5 hours                 127.0.0.1:30001->80/tcp
+confident_pasteur                     Exited (137) 6 hours ago   
+sharp_williamson                      Exited (0) 7 hours ago
+Failed: False
+

@@ -1,0 +1,286 @@
+CODYSSEY MISSION REPORT SYSTEM
+M_E1-1 R08 - Troubleshooting Verification
+Date: 2026-11-14 20:55:44
+
+01. Existing Port Usage
+
+> docker ps --format "table {{.Names}}\t{{.Ports}}"
+
+    if ($LASTEXITCODE -ne 0) {
+        throw "Docker ps failed."
+    }
+
+    Get-NetTCPConnection -LocalPort 30003 -State Listen |
+        Select-Object LocalAddress, LocalPort, State, OwningProcess |
+        Format-Table -AutoSize
+NAMES                                 PORTS
+codyssey-review-fix-20261114-165754   127.0.0.1:53783->80/tcp
+codyssey-bind                         127.0.0.1:30003->80/tcp
+codyssey-web-2                        127.0.0.1:30002->80/tcp
+codyssey-web-1                        127.0.0.1:30001->80/tcp
+
+LocalAddress LocalPort  State OwningProcess
+------------ ---------  ----- -------------
+127.0.0.1        30003 Listen         27696
+Failed: False
+
+02. Identify Port Owner Process
+
+> $connections = Get-NetTCPConnection -LocalPort 30003 -State Listen -ErrorAction Stop
+
+    foreach ($connection in $connections) {
+
+        Get-Process -Id $connection.OwningProcess -ErrorAction Stop |
+            Select-Object Id, ProcessName |
+            Format-Table -AutoSize
+    }
+
+   Id ProcessName       
+   -- -----------       
+27696 com.docker.backend
+Failed: False
+
+03. Reproduce and Resolve Port Conflict
+
+> $testName = "codyssey-r08-" + [guid]::NewGuid().ToString("N").Substring(0,8)
+
+    $created = $false
+
+    try {
+
+        "TEST CONTAINER: $testName"
+        "EXPECTED RESULT: Port 30003 conflict"
+
+        "COMMAND: docker run -d --name $testName -p 127.0.0.1:30003:80 codyssey-web:v1"
+
+        $result = docker run -d --pull=never --name $testName -p 127.0.0.1:30003:80 codyssey-web:v1 2>&1
+
+        $exitCode = $LASTEXITCODE
+
+        $result | ForEach-Object { $_.ToString() }
+
+        docker container inspect $testName 2>$null | Out-Null
+
+        $created = ($LASTEXITCODE -eq 0)
+
+        "EXPECTED FAILURE EXIT CODE: $exitCode"
+
+        if ($exitCode -eq 0) {
+            throw "Expected port conflict did not occur."
+        }
+
+        $resultText = $result | Out-String
+
+        if ($resultText -notmatch "port is already allocated|address already in use|ports are not available") {
+            throw "Failure was not identified as a port conflict."
+        }
+
+        "PASS: Port conflict reproduced"
+
+        if ($created) {
+
+            "COMMAND: docker rm $testName"
+
+            docker rm $testName
+
+            if ($LASTEXITCODE -ne 0) {
+                throw "Test container removal failed."
+            }
+
+            $created = $false
+        }
+
+        "SOLUTION: Automatic host port allocation"
+
+        "COMMAND: docker run -d --name $testName -p 127.0.0.1::80 codyssey-web:v1"
+
+        docker run -d --pull=never --name $testName -p 127.0.0.1::80 codyssey-web:v1
+
+        $runExit = $LASTEXITCODE
+
+        docker container inspect $testName 2>$null | Out-Null
+
+        $created = ($LASTEXITCODE -eq 0)
+
+        if ($runExit -ne 0) {
+            throw "Automatic port allocation failed."
+        }
+
+        "COMMAND: docker port $testName 80/tcp"
+
+        $mapping = docker port $testName 80/tcp
+
+        if ($LASTEXITCODE -ne 0) {
+            throw "Port inspection failed."
+        }
+
+        $mapping
+
+        if ($mapping -notmatch "127\.0\.0\.1:(\d+)") {
+            throw "Assigned port not found."
+        }
+
+        $assignedPort = $Matches[1]
+
+        $url = "http://127.0.0.1:$assignedPort/"
+
+        "URL: $url"
+
+        $response = $null
+
+        for ($i = 0; $i -lt 10; $i++) {
+
+            try {
+                $response = Invoke-WebRequest -Uri $url -UseBasicParsing -TimeoutSec 5 -ErrorAction Stop
+                break
+            }
+            catch {
+                Start-Sleep -Seconds 1
+            }
+        }
+
+        if (-not $response -or $response.StatusCode -ne 200) {
+            throw "HTTP verification failed."
+        }
+
+        "HTTP STATUS: $($response.StatusCode)"
+
+        "PASS: Port conflict resolved using automatic port allocation"
+    }
+    finally {
+
+        if ($created) {
+
+            "COMMAND: docker rm -f $testName"
+
+            docker rm -f $testName
+
+            if ($LASTEXITCODE -ne 0) {
+                throw "Temporary container cleanup failed."
+            }
+        }
+    }
+TEST CONTAINER: codyssey-r08-c2554a2a
+EXPECTED RESULT: Port 30003 conflict
+COMMAND: docker run -d --name codyssey-r08-c2554a2a -p 127.0.0.1:30003:80 codyssey-web:v1
+3af678a5ad4da6507d04aec49804acce77a84583effa40cc3e2cddda21bd58c0
+docker: Error response from daemon: failed to set up container networking: driver failed programming external connectivity on endpoint codyssey-r08-c2554a2a (1e25393fa652569ea37effdaad4effe48a38e58d90348531b067d43c90e3b86c): Bind for 127.0.0.1:30003 failed: port is already allocated
+System.Management.Automation.RemoteException
+Run 'docker run --help' for more information
+EXPECTED FAILURE EXIT CODE: 125
+PASS: Port conflict reproduced
+COMMAND: docker rm codyssey-r08-c2554a2a
+codyssey-r08-c2554a2a
+SOLUTION: Automatic host port allocation
+COMMAND: docker run -d --name codyssey-r08-c2554a2a -p 127.0.0.1::80 codyssey-web:v1
+9ffca275aa35c91d288b5081a18ba24425c244715f6c362fd07c22a3c59a8a04
+COMMAND: docker port codyssey-r08-c2554a2a 80/tcp
+127.0.0.1:52364
+URL: http://127.0.0.1:52364/
+HTTP STATUS: 200
+PASS: Port conflict resolved using automatic port allocation
+COMMAND: docker rm -f codyssey-r08-c2554a2a
+codyssey-r08-c2554a2a
+Failed: False
+
+04. HTML Encoding Inspection
+
+> $path = (Resolve-Path ".\app\index.html").Path
+
+    $bytes = [System.IO.File]::ReadAllBytes($path)
+
+    "FILE: app/index.html"
+
+    "FILE SIZE: $($bytes.Length) bytes"
+
+    "FIRST 8 BYTES: $([BitConverter]::ToString($bytes[0..7]))"
+
+    $hasBom = (
+        $bytes.Length -ge 3 -and
+        $bytes[0] -eq 239 -and
+        $bytes[1] -eq 187 -and
+        $bytes[2] -eq 191
+    )
+
+    "UTF-8 BOM PRESENT: $hasBom"
+
+    $strictUtf8 = New-Object System.Text.UTF8Encoding($false, $true)
+
+    $decoded = $strictUtf8.GetString($bytes)
+
+    "PASS: File is valid UTF-8"
+
+    "FIRST LINE: $(($decoded -split '\r?\n')[0])"
+
+    "CONSOLE OUTPUT ENCODING: $([Console]::OutputEncoding.WebName)"
+FILE: app/index.html
+FILE SIZE: 2430 bytes
+FIRST 8 BYTES: EF-BB-BF-3C-21-44-4F-43
+UTF-8 BOM PRESENT: True
+PASS: File is valid UTF-8
+FIRST LINE: ﻿<!DOCTYPE html>
+CONSOLE OUTPUT ENCODING: ks_c_5601-1987
+Failed: False
+
+05. HTTP Download and SHA256 Verification
+
+> $tempFile = Join-Path ([System.IO.Path]::GetTempPath()) ("codyssey-r08-" + [guid]::NewGuid().ToString("N") + ".html")
+
+    try {
+
+        "COMMAND: curl.exe --fail --silent --show-error --max-time 10 -o $tempFile http://127.0.0.1:30003/"
+
+        curl.exe --fail --silent --show-error --max-time 10 -o $tempFile http://127.0.0.1:30003/
+
+        if ($LASTEXITCODE -ne 0) {
+            throw "HTTP download failed."
+        }
+
+        $sourceHash = (Get-FileHash ".\app\index.html" -Algorithm SHA256 -ErrorAction Stop).Hash
+
+        $downloadHash = (Get-FileHash $tempFile -Algorithm SHA256 -ErrorAction Stop).Hash
+
+        "SOURCE SHA256: $sourceHash"
+
+        "DOWNLOAD SHA256: $downloadHash"
+
+        if ($sourceHash -ne $downloadHash) {
+            throw "Downloaded HTML differs from source."
+        }
+
+        "PASS: HTTP response matches original HTML bytes"
+    }
+    finally {
+
+        if (Test-Path -LiteralPath $tempFile) {
+
+            Remove-Item -LiteralPath $tempFile -Force -ErrorAction Stop
+        }
+    }
+COMMAND: curl.exe --fail --silent --show-error --max-time 10 -o C:\Users\<USER>\AppData\Local\Temp\codyssey-r08-0b25b4970e2a4338b0a100872d8af250.html http://127.0.0.1:30003/
+SOURCE SHA256: A15EBBC92FF67E7E524B2A54D79DC852C2477AE4635A0456BFDC847975407ED9
+DOWNLOAD SHA256: A15EBBC92FF67E7E524B2A54D79DC852C2477AE4635A0456BFDC847975407ED9
+PASS: HTTP response matches original HTML bytes
+Failed: False
+
+06. Existing Containers Verification
+
+> docker ps -a --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
+NAMES                                 STATUS                     PORTS
+codyssey-review-fix-20261114-165754   Up 4 hours                 127.0.0.1:53783->80/tcp
+codyssey-review-20261114-165542       Created                    
+codyssey-volume-2                     Exited (0) 5 hours ago     
+codyssey-bind                         Up 6 hours                 127.0.0.1:30003->80/tcp
+codyssey-web-2                        Up 6 hours                 127.0.0.1:30002->80/tcp
+codyssey-web-1                        Up 6 hours                 127.0.0.1:30001->80/tcp
+confident_pasteur                     Exited (137) 7 hours ago   
+sharp_williamson                      Exited (0) 7 hours ago
+Failed: False
+
+07. Existing Volume Verification
+
+> docker volume ls
+DRIVER    VOLUME NAME
+local     codyssey-data
+Failed: False
+

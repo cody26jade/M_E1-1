@@ -1,0 +1,148 @@
+﻿CODYSSEY MISSION REPORT SYSTEM
+M_E1-1 R06B - Linux Path Verification
+Date: 2026-11-14 20:51:40
+
+01. Linux Path Script Verification
+
+> Get-Item ".\scripts\R06_linux_paths.sh" -ErrorAction Stop |
+        Select-Object Name, Length
+
+Name               Length
+----               ------
+R06_linux_paths.sh   1434
+Failed: False
+
+02. Execute and Validate Linux Path Tests
+
+> $scriptDir = (Resolve-Path ".\scripts").Path
+
+    $result = docker run --rm --pull=never --mount "type=bind,source=$scriptDir,target=/scripts,readonly" ubuntu:latest bash /scripts/R06_linux_paths.sh 2>&1
+
+    $exitCode = $LASTEXITCODE
+
+    $result | ForEach-Object {
+        $_.ToString()
+    }
+
+    if ($exitCode -ne 0) {
+        throw "Docker execution failed: $exitCode"
+    }
+
+    $resultText = $result | Out-String
+
+    if ($resultText -notmatch "(?m)^PASS: ALL LINUX PATH TESTS COMPLETED\s*$") {
+        throw "Final success marker not found."
+    }
+
+    "PASS: Exit code and completion marker verified"
+========================================
+M_E1-1 R06 - Linux Path Verification
+========================================
+
+[01] Create test file
++ mkdir -p /tmp/codyssey-r06/app
++ echo 'Linux Path Test'
++ cd /tmp/codyssey-r06
++ pwd
+/tmp/codyssey-r06
++ set +x
+
+[02] Absolute path
++ ls -l /tmp/codyssey-r06/app/test.txt
+-rw-r--r-- 1 root root 16 Nov 14 11:51 /tmp/codyssey-r06/app/test.txt
++ cat /tmp/codyssey-r06/app/test.txt
+Linux Path Test
++ set +x
+
+[03] Relative path
++ ls -l ./app/test.txt
+-rw-r--r-- 1 root root 16 Nov 14 11:51 ./app/test.txt
++ cat ./app/test.txt
+Linux Path Test
++ set +x
+
+[04] Compare resolved paths
++ realpath /tmp/codyssey-r06/app/test.txt
+/tmp/codyssey-r06/app/test.txt
++ realpath ./app/test.txt
+/tmp/codyssey-r06/app/test.txt
++ set +x
+
+[05] Compare file identity
++ test /tmp/codyssey-r06/app/test.txt -ef ./app/test.txt
++ set +x
+PASS: Both Linux paths identify the same file
+
+[06] Compare file hashes
++ sha256sum /tmp/codyssey-r06/app/test.txt
+f37aef734b629ec780066d1289cba88cb7fdfcde8e780c8ca677cbdb874dd39d  /tmp/codyssey-r06/app/test.txt
++ sha256sum ./app/test.txt
+f37aef734b629ec780066d1289cba88cb7fdfcde8e780c8ca677cbdb874dd39d  ./app/test.txt
++ set +x
+
+[07] Parent directory relative path
++ cd app
++ pwd
+/tmp/codyssey-r06/app
++ cat ../app/test.txt
+Linux Path Test
++ test ../app/test.txt -ef ./test.txt
++ set +x
+PASS: Parent directory path verified
+
+[08] Cleanup
++ cd /tmp
++ rm /tmp/codyssey-r06/app/test.txt
++ rmdir /tmp/codyssey-r06/app
++ rmdir /tmp/codyssey-r06
++ test '!' -e /tmp/codyssey-r06
++ set +x
+
+========================================
+PASS: ALL LINUX PATH TESTS COMPLETED
+========================================
+PASS: Exit code and completion marker verified
+Failed: False
+
+03. Windows Path Comparison
+
+> $absolutePath = (Resolve-Path ".\app\index.html").Path
+
+    $relativePath = ".\app\index.html"
+
+    "ABSOLUTE PATH: $absolutePath"
+    "RELATIVE PATH: $relativePath"
+
+    $hash1 = (Get-FileHash -LiteralPath $absolutePath -Algorithm SHA256 -ErrorAction Stop).Hash
+
+    $hash2 = (Get-FileHash -LiteralPath $relativePath -Algorithm SHA256 -ErrorAction Stop).Hash
+
+    "ABSOLUTE HASH: $hash1"
+    "RELATIVE HASH: $hash2"
+
+    if ($hash1 -ne $hash2) {
+        throw "Windows file hash mismatch."
+    }
+
+    "PASS: Windows absolute and relative paths verified"
+ABSOLUTE PATH: C:\2026Codyssey_AllInOne\M_E1-1\app\index.html
+RELATIVE PATH: .\app\index.html
+ABSOLUTE HASH: A15EBBC92FF67E7E524B2A54D79DC852C2477AE4635A0456BFDC847975407ED9
+RELATIVE HASH: A15EBBC92FF67E7E524B2A54D79DC852C2477AE4635A0456BFDC847975407ED9
+PASS: Windows absolute and relative paths verified
+Failed: False
+
+04. Existing Containers Verification
+
+> docker ps -a --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
+NAMES                                 STATUS                     PORTS
+codyssey-review-fix-20261114-165754   Up 4 hours                 127.0.0.1:53783->80/tcp
+codyssey-review-20261114-165542       Created                    
+codyssey-volume-2                     Exited (0) 5 hours ago     
+codyssey-bind                         Up 6 hours                 127.0.0.1:30003->80/tcp
+codyssey-web-2                        Up 6 hours                 127.0.0.1:30002->80/tcp
+codyssey-web-1                        Up 6 hours                 127.0.0.1:30001->80/tcp
+confident_pasteur                     Exited (137) 6 hours ago   
+sharp_williamson                      Exited (0) 7 hours ago
+Failed: False
+

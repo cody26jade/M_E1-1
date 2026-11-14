@@ -1,0 +1,199 @@
+﻿CODYSSEY MISSION REPORT SYSTEM
+M_E1-1 R06 - Git and Project Paths
+Date: 2026-11-14 20:49:32
+
+01. Git Version
+
+> git --version
+git version 2.56.0.windows.4
+Failed: False
+
+02. Git User Name
+
+> git config user.name
+cody26jade
+Failed: False
+
+03. Git Repository Root
+
+> git rev-parse --show-toplevel
+C:/2026Codyssey_AllInOne/M_E1-1
+Failed: False
+
+04. Git Current Branch
+
+> git branch --show-current
+main
+Failed: False
+
+05. Git Remote Repository
+
+> git remote -v
+origin	https://github.com/cody26jade/M_E1-1.git (fetch)
+origin	https://github.com/cody26jade/M_E1-1.git (push)
+Failed: False
+
+06. Git Commit History
+
+> git log --oneline --graph -10
+* a12b80f Complete M_E1-1 mission and reproduction verification
+* 6947c22 Add Git commit evidence
+* a3ad338 Initial commit: M_E1-1 mission
+Failed: False
+
+07. Git Working Tree
+
+> git status --short --branch
+## main...origin/main
+?? logs/R02_linux_file_operations.txt
+?? logs/R03_linux_permissions.txt
+?? logs/R04_docker_basic_commands.txt
+?? logs/R05_docker_advanced_verification.txt
+?? scripts/
+Failed: False
+
+08. Project Directory Structure
+
+> Get-ChildItem -Force |
+        Select-Object Mode, Name |
+        Format-Table -AutoSize
+
+Mode   Name         
+----   ----         
+d--h-- .git         
+d----- app          
+d----- logs         
+d----- screenshots  
+d----- scripts      
+-a---- .dockerignore
+-a---- .gitignore   
+-a---- Dockerfile   
+-a---- README.md
+Failed: False
+
+09. Git Ignore Rules
+
+> Get-Content ".\.gitignore"
+# Environment and secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Python temporary files
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# IDE settings
+.vscode/
+.idea/
+
+# Windows temporary files
+Thumbs.db
+Desktop.ini
+*.tmp
+Failed: False
+
+10. Docker Ignore Rules
+
+> Get-Content ".\.dockerignore"
+.git
+screenshots
+logs
+Failed: False
+
+11. Windows Absolute Path
+
+> $absolutePath = "C:\2026Codyssey_AllInOne\M_E1-1\app\index.html"
+
+    "ABSOLUTE PATH: $absolutePath"
+
+    Get-Item -LiteralPath $absolutePath -ErrorAction Stop |
+        Select-Object Name, Length, FullName |
+        Format-List
+ABSOLUTE PATH: C:\2026Codyssey_AllInOne\M_E1-1\app\index.html
+
+
+Name     : index.html
+Length   : 2430
+FullName : C:\2026Codyssey_AllInOne\M_E1-1\app\index.html
+Failed: False
+
+12. Windows Relative Path
+
+> $relativePath = ".\app\index.html"
+
+    "CURRENT DIRECTORY: $((Get-Location).Path)"
+    "RELATIVE PATH: $relativePath"
+
+    Get-Item -LiteralPath $relativePath -ErrorAction Stop |
+        Select-Object Name, Length, FullName |
+        Format-List
+CURRENT DIRECTORY: C:\2026Codyssey_AllInOne\M_E1-1
+RELATIVE PATH: .\app\index.html
+
+
+Name     : index.html
+Length   : 2430
+FullName : C:\2026Codyssey_AllInOne\M_E1-1\app\index.html
+Failed: False
+
+13. Absolute and Relative Path Comparison
+
+> $absolutePath = "C:\2026Codyssey_AllInOne\M_E1-1\app\index.html"
+
+    $relativePath = ".\app\index.html"
+
+    $absoluteHash = Get-FileHash -LiteralPath $absolutePath -Algorithm SHA256 -ErrorAction Stop
+
+    $relativeHash = Get-FileHash -LiteralPath $relativePath -Algorithm SHA256 -ErrorAction Stop
+
+    "ABSOLUTE HASH: $($absoluteHash.Hash)"
+    "RELATIVE HASH: $($relativeHash.Hash)"
+
+    if ($absoluteHash.Hash -ne $relativeHash.Hash) {
+        throw "File hash mismatch."
+    }
+
+    "PASS: Both paths identify identical file contents"
+ABSOLUTE HASH: A15EBBC92FF67E7E524B2A54D79DC852C2477AE4635A0456BFDC847975407ED9
+RELATIVE HASH: A15EBBC92FF67E7E524B2A54D79DC852C2477AE4635A0456BFDC847975407ED9
+PASS: Both paths identify identical file contents
+Failed: False
+
+14. Linux Absolute and Relative Paths
+
+> docker run --rm --pull=never ubuntu:latest bash -c 'exec 2>&1; set -ex; mkdir -p /tmp/codyssey-r06/app; echo "Linux Path Test" > /tmp/codyssey-r06/app/test.txt; cd /tmp/codyssey-r06; pwd; ls -l /tmp/codyssey-r06/app/test.txt; ls -l ./app/test.txt; cat /tmp/codyssey-r06/app/test.txt; cat ./app/test.txt; test /tmp/codyssey-r06/app/test.txt -ef ./app/test.txt; echo "PASS: Both Linux paths identify the same file"'
++ mkdir -p /tmp/codyssey-r06/app
++ echo Linux
+Linux
+Failed: False
+
+15. Revision Evidence Files
+
+> Get-ChildItem ".\logs" -Filter "R*.txt" -File |
+        Select-Object Name, Length |
+        Format-Table -AutoSize
+
+    Get-ChildItem ".\scripts" -File |
+        Select-Object Name, Length |
+        Format-Table -AutoSize
+
+Name                                 Length
+----                                 ------
+R02_linux_file_operations.txt          3922
+R03_linux_permissions.txt              4693
+R04_docker_basic_commands.txt          5845
+R05_docker_advanced_verification.txt  14226
+
+
+
+Name                         Length
+----                         ------
+R02_linux_file_operations.sh   1678
+R03_linux_permissions.sh       2528
+Failed: False
+

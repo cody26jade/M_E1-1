@@ -1,0 +1,131 @@
+﻿CODYSSEY MISSION REPORT SYSTEM
+M_E1-1 R04 - Docker Basic Commands
+Date: 2026-11-14 20:45:29
+
+01. Docker Version
+
+> docker --version
+Docker version 29.9.2, build a82e528
+Failed: False
+
+02. Docker Client and Server Version
+
+> docker version
+Client:
+ Version:           29.9.2
+ API version:       1.56
+ Go version:        go1.26.10
+ Git commit:        a82e528
+ Built:             Tue Oct 20 19:44:07 2026
+ OS/Arch:           windows/amd64
+ Context:           desktop-linux
+
+Server: Docker Desktop 4.97.0 (244584)
+ Engine:
+  Version:          29.9.2
+  API version:      1.56 (minimum version 1.40)
+  Go version:       go1.26.10
+  Git commit:       0367cbe
+  Built:            Tue Oct 20 18:45:02 2026
+  OS/Arch:          linux/amd64
+  Experimental:     false
+ containerd:
+  Version:          v2.4.2
+  GitCommit:        b7a25261e029d68978bbf290df0a62fc819b3c51
+ runc:
+  Version:          1.5.2
+  GitCommit:        v1.5.2-0-g29dd3dc2
+ docker-init:
+  Version:          0.19.0
+  GitCommit:        de40ad0
+Failed: False
+
+03. Docker Engine Status
+
+> docker info --format "Server Version: {{.ServerVersion}} | OS: {{.OSType}} | Containers: {{.Containers}} | Images: {{.Images}}"
+Server Version: 29.9.2 | OS: linux | Containers: 8 | Images: 4
+Failed: False
+
+04. Existing Hello World Image
+
+> docker image inspect hello-world:latest --format "Image ID: {{.Id}} | OS: {{.Os}} | Architecture: {{.Architecture}}"
+Image ID: sha256:cf1b20a0c89a666b6950fecda7ccbc1b1a86520e7c53f908f3a21e79d0d60458 | OS: linux | Architecture: amd64
+Failed: False
+
+05. Execute Hello World Container
+
+> docker run --rm --pull=never hello-world:latest
+
+Hello from Docker!
+This message shows that your installation appears to be working correctly.
+
+To generate this message, Docker took the following steps:
+ 1. The Docker client contacted the Docker daemon.
+ 2. The Docker daemon pulled the "hello-world" image from the Docker Hub.
+    (amd64)
+ 3. The Docker daemon created a new container from that image which runs the
+    executable that produces the output you are currently reading.
+ 4. The Docker daemon streamed that output to the Docker client, which sent it
+    to your terminal.
+
+To try something more ambitious, you can run an Ubuntu container with:
+ $ docker run -it ubuntu bash
+
+Share images, automate workflows, and more with a free Docker ID:
+ https://hub.docker.com/
+
+For more examples and ideas, visit:
+ https://docs.docker.com/get-started/
+Failed: False
+
+06. Docker Images Original Output
+
+> docker images
+IMAGE                             ID             DISK USAGE   CONTENT SIZE   EXTRA
+codyssey-review:20261114-165542   da0aaa1180ce       93.7MB         26.4MB   U    
+codyssey-web:v1                   3af2f6904b6b       93.7MB         26.4MB   U    
+hello-world:latest                cf1b20a0c89a       25.9kB         9.49kB   U    
+ubuntu:latest                     065aa8626841        163MB         45.9MB   U
+Failed: False
+
+07. Docker Images Detailed List
+
+> docker image ls --format "table {{.Repository}}\t{{.Tag}}\t{{.ID}}\t{{.Size}}"
+REPOSITORY        TAG               IMAGE ID       SIZE
+codyssey-review   20261114-165542   da0aaa1180ce   93.7MB
+codyssey-web      v1                3af2f6904b6b   93.7MB
+hello-world       latest            cf1b20a0c89a   25.9kB
+ubuntu            latest            065aa8626841   163MB
+Failed: False
+
+08. Docker Running Containers
+
+> docker ps
+CONTAINER ID   IMAGE                             COMMAND                   CREATED       STATUS       PORTS                     NAMES
+aab569910e59   codyssey-review:20261114-165542   "/docker-entrypoint.??   4 hours ago   Up 4 hours   127.0.0.1:53783->80/tcp   codyssey-review-fix-20261114-165754
+d71a1f8cbede   codyssey-web:v1                   "/docker-entrypoint.??   5 hours ago   Up 5 hours   127.0.0.1:30003->80/tcp   codyssey-bind
+7f1f296fe05c   codyssey-web:v1                   "/docker-entrypoint.??   6 hours ago   Up 6 hours   127.0.0.1:30002->80/tcp   codyssey-web-2
+7e14e6fea41d   codyssey-web:v1                   "/docker-entrypoint.??   6 hours ago   Up 6 hours   127.0.0.1:30001->80/tcp   codyssey-web-1
+Failed: False
+
+09. Docker All Containers
+
+> docker ps -a
+CONTAINER ID   IMAGE                             COMMAND                   CREATED       STATUS                     PORTS                     NAMES
+aab569910e59   codyssey-review:20261114-165542   "/docker-entrypoint.??   4 hours ago   Up 4 hours                 127.0.0.1:53783->80/tcp   codyssey-review-fix-20261114-165754
+f47b86edd547   codyssey-review:20261114-165542   "/docker-entrypoint.??   4 hours ago   Created                                              codyssey-review-20261114-165542
+0e7589e00a57   ubuntu                            "cat /data/mission.t??   5 hours ago   Exited (0) 5 hours ago                               codyssey-volume-2
+d71a1f8cbede   codyssey-web:v1                   "/docker-entrypoint.??   5 hours ago   Up 5 hours                 127.0.0.1:30003->80/tcp   codyssey-bind
+7f1f296fe05c   codyssey-web:v1                   "/docker-entrypoint.??   6 hours ago   Up 6 hours                 127.0.0.1:30002->80/tcp   codyssey-web-2
+7e14e6fea41d   codyssey-web:v1                   "/docker-entrypoint.??   6 hours ago   Up 6 hours                 127.0.0.1:30001->80/tcp   codyssey-web-1
+b703fa220da4   ubuntu                            "bash"                    7 hours ago   Exited (137) 6 hours ago                             confident_pasteur
+dbd1ea00eb26   hello-world                       "/hello"                  7 hours ago   Exited (0) 7 hours ago                               sharp_williamson
+Failed: False
+
+10. Docker Volume List
+
+> docker volume ls
+DRIVER    VOLUME NAME
+local     codyssey-data
+Failed: False
+

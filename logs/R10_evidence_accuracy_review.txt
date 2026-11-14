@@ -1,0 +1,241 @@
+CODYSSEY MISSION REPORT SYSTEM
+M_E1-1 R10 - Evidence Accuracy Review
+Date: 2026-11-14 21:03:23
+
+01. R05 Network and Namespace Evidence
+
+> Select-String `
+        -Path ".\logs\R05_docker_advanced_verification.txt" `
+        -Pattern 'net:\[|172\.\d+\.\d+\.\d+|Namespace|IPAddress' `
+        -Context 0,1 |
+        ForEach-Object {
+            $_.ToString()
+        }
+> C:\2026Codyssey_AllInOne\M_E1-1\logs\R05_docker_advanced_verification.txt:72:> docker inspect codyssey-web-1 codyssey-web-2 codyssey-bind --format "{{.Name}} | {{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}"
+> C:\2026Codyssey_AllInOne\M_E1-1\logs\R05_docker_advanced_verification.txt:73:/codyssey-web-1 | 172.17.0.2
+> C:\2026Codyssey_AllInOne\M_E1-1\logs\R05_docker_advanced_verification.txt:74:/codyssey-web-2 | 172.17.0.3
+> C:\2026Codyssey_AllInOne\M_E1-1\logs\R05_docker_advanced_verification.txt:75:/codyssey-bind | 172.17.0.4
+  C:\2026Codyssey_AllInOne\M_E1-1\logs\R05_docker_advanced_verification.txt:76:Failed: False
+> C:\2026Codyssey_AllInOne\M_E1-1\logs\R05_docker_advanced_verification.txt:88:08. Internal Network Namespace
+  C:\2026Codyssey_AllInOne\M_E1-1\logs\R05_docker_advanced_verification.txt:89:
+> C:\2026Codyssey_AllInOne\M_E1-1\logs\R05_docker_advanced_verification.txt:93:net:[4026532380]
+> C:\2026Codyssey_AllInOne\M_E1-1\logs\R05_docker_advanced_verification.txt:94:net:[4026532456]
+> C:\2026Codyssey_AllInOne\M_E1-1\logs\R05_docker_advanced_verification.txt:95:net:[4026532532]
+  C:\2026Codyssey_AllInOne\M_E1-1\logs\R05_docker_advanced_verification.txt:96:Failed: False
+Failed: False
+
+02. R05 HTTP Response Evidence
+
+> Select-String `
+        -Path ".\logs\R05_docker_advanced_verification.txt" `
+        -Pattern 'HTTP/1.1|HTTP STATUS|HTTP 200|30001|30002|30003' |
+        ForEach-Object {
+            $_.Line
+        }
+80/tcp -> 127.0.0.1:30001
+80/tcp -> 127.0.0.1:30002
+80/tcp -> 127.0.0.1:30003
+09. HTTP Response Port 30001
+> curl.exe --fail --silent --show-error --max-time 10 -i http://127.0.0.1:30001/
+HTTP/1.1 200 OK
+10. HTTP Response Port 30002
+> curl.exe --fail --silent --show-error --max-time 10 -i http://127.0.0.1:30002/
+HTTP/1.1 200 OK
+11. HTTP Response Port 30003
+> curl.exe --fail --silent --show-error --max-time 10 -i http://127.0.0.1:30003/
+HTTP/1.1 200 OK
+codyssey-bind                         Up 5 hours                 127.0.0.1:30003->80/tcp
+codyssey-web-2                        Up 6 hours                 127.0.0.1:30002->80/tcp
+codyssey-web-1                        Up 6 hours                 127.0.0.1:30001->80/tcp
+Failed: False
+
+03. R05 Mount and Volume Evidence
+
+> Select-String `
+        -Path ".\logs\R05_docker_advanced_verification.txt" `
+        -Pattern 'mission.txt|codyssey-data|bytes|Mount|preserved|readonly|ReadOnly' `
+        -Context 0,1 |
+        ForEach-Object {
+            $_.ToString()
+        }
+> C:\2026Codyssey_AllInOne\M_E1-1\logs\R05_docker_advanced_verification.txt:109:Accept-Ranges: bytes
+  C:\2026Codyssey_AllInOne\M_E1-1\logs\R05_docker_advanced_verification.txt:110:
+> C:\2026Codyssey_AllInOne\M_E1-1\logs\R05_docker_advanced_verification.txt:217:Accept-Ranges: bytes
+  C:\2026Codyssey_AllInOne\M_E1-1\logs\R05_docker_advanced_verification.txt:218:
+> C:\2026Codyssey_AllInOne\M_E1-1\logs\R05_docker_advanced_verification.txt:325:Accept-Ranges: bytes
+  C:\2026Codyssey_AllInOne\M_E1-1\logs\R05_docker_advanced_verification.txt:326:
+> C:\2026Codyssey_AllInOne\M_E1-1\logs\R05_docker_advanced_verification.txt:385:        <p class="description">Bind Mount Update SUCCESS</p>
+  C:\2026Codyssey_AllInOne\M_E1-1\logs\R05_docker_advanced_verification.txt:386:
+> C:\2026Codyssey_AllInOne\M_E1-1\logs\R05_docker_advanced_verification.txt:422:12. Bind Mount Information
+  C:\2026Codyssey_AllInOne\M_E1-1\logs\R05_docker_advanced_verification.txt:423:
+> C:\2026Codyssey_AllInOne\M_E1-1\logs\R05_docker_advanced_verification.txt:424:> docker inspect codyssey-bind --format "{{json .Mounts}}"
+  C:\2026Codyssey_AllInOne\M_E1-1\logs\R05_docker_advanced_verification.txt:425:[{"Type":"bind","Source":"C:\\2026Codyssey_AllInOne\\M_E1-1\\app","Destination":"/usr/share/nginx/html","Mode":"ro","RW":false,"Propagation":"rprivate"}]
+> C:\2026Codyssey_AllInOne\M_E1-1\logs\R05_docker_advanced_verification.txt:430:> docker volume inspect codyssey-data
+  C:\2026Codyssey_AllInOne\M_E1-1\logs\R05_docker_advanced_verification.txt:431:[
+> C:\2026Codyssey_AllInOne\M_E1-1\logs\R05_docker_advanced_verification.txt:436:        "Mountpoint": "/var/lib/docker/volumes/codyssey-data/_data",
+> C:\2026Codyssey_AllInOne\M_E1-1\logs\R05_docker_advanced_verification.txt:437:        "Name": "codyssey-data",
+  C:\2026Codyssey_AllInOne\M_E1-1\logs\R05_docker_advanced_verification.txt:438:        "Options": null,
+> C:\2026Codyssey_AllInOne\M_E1-1\logs\R05_docker_advanced_verification.txt:446:> docker run --rm --pull=never --mount "type=volume,source=codyssey-data,target=/data,readonly" ubuntu:latest bash -c 'ls -la /data && cat /data/mission.txt'
+  C:\2026Codyssey_AllInOne\M_E1-1\logs\R05_docker_advanced_verification.txt:447:total 12
+> C:\2026Codyssey_AllInOne\M_E1-1\logs\R05_docker_advanced_verification.txt:450:-rw-r--r-- 1 root root   33 Nov 14 06:22 mission.txt
+  C:\2026Codyssey_AllInOne\M_E1-1\logs\R05_docker_advanced_verification.txt:451:Codyssey Volume Persistence Test
+Failed: False
+
+04. Original Docker Build Evidence
+
+> Select-String `
+        -Path ".\logs\06_docker_build.txt" `
+        -Pattern 'COPY app/index.html|naming to|DONE' |
+        Select-Object -Last 15 |
+        ForEach-Object {
+            $_.Line
+        }
+#5 extracting sha256:a746bd1dc828f61bf43b775dcfecb9ded8a3d3b41789915fe135fa6b9fa85965 0.0s done
+#5 extracting sha256:b9c6ee6a30f8811636d7273be348906cf0e4e9725378dd54b7d4a3725538cad4 0.0s done
+#5 extracting sha256:69d81d5522572d5b7abcc8f594ecbc4cf9bea72402675a419e8d7b516e4c3f14 0.0s done
+#5 extracting sha256:da90db506dd5f2d604467c4dc38442534f74c9e76c1982df0c262e144bad7bc9 0.4s done
+#5 DONE 3.4s
+#6 [2/2] COPY app/index.html /usr/share/nginx/html/index.html
+#6 DONE 0.1s
+#7 exporting layers 0.1s done
+#7 exporting manifest sha256:e4a43e6d8dee8b275986b552625365576278246d1b42c705a848e33a4ce198fe 0.0s done
+#7 exporting config sha256:4fabf1fd8a797bd0e597cf5f079aba16c980858b300640184c2cb8da0f4d5835 0.0s done
+#7 exporting attestation manifest sha256:d25b1be9f12088ef153c82776cbd7f9e0bcdd3cb438d092c8094d5b37677bcb1 0.0s done
+#7 exporting manifest list sha256:3af2f6904b6bd715dd909e6ec1fa305655bd42bda58ceec465b8d4e570d531be 0.0s done
+#7 naming to docker.io/library/codyssey-web:v1 done
+#7 unpacking to docker.io/library/codyssey-web:v1 0.8s done
+#7 DONE 0.9s
+Failed: False
+
+05. Original Volume Evidence
+
+> Get-Content ".\logs\09_volume.txt"
+Volume: codyssey-data
+Container 1: Removed
+Container 2: Created
+Recovered data: Codyssey Volume Persistence Test
+Data preserved: True
+Name: codyssey-data / Driver: local / Mountpoint: /var/lib/docker/volumes/codyssey-data/_data
+Failed: False
+
+06. README Numeric Evidence
+
+> Select-String `
+        -Path ".\README.md" `
+        -Pattern '172\.17\.|402653|33 bytes|#6 DONE|#7 DONE' |
+        ForEach-Object {
+            $_.Line
+        }
+#6 DONE 0.1s
+#7 DONE 0.9s
+| codyssey-web-1 | 172.17.0.2 | 80 | 30001 | 4026532380 |
+| codyssey-web-2 | 172.17.0.3 | 80 | 30002 | 4026532456 |
+| codyssey-bind | 172.17.0.4 | 80 | 30003 | 4026532532 |
+net:[4026532380]
+net:[4026532456]
+net:[4026532532]
+- 기존 데이터: mission.txt, 33 bytes
+Failed: False
+
+07. Sensitive Information Scan
+
+> $files = @(
+        Get-Item ".\README.md"
+        Get-Item ".\Dockerfile"
+        Get-ChildItem ".\app" -Recurse -File
+        Get-ChildItem ".\logs" -File
+        Get-ChildItem ".\scripts" -File
+    )
+
+    $patterns = @(
+        'github_pat_[A-Za-z0-9_]+',
+        'gh[pousr]_[A-Za-z0-9]+',
+        'sk-[A-Za-z0-9_-]{15,}',
+        '-----BEGIN .*PRIVATE KEY-----',
+        '(?i)[A-Z]:\\Users\\(?!<USER>)[^\\\r\n]+',
+        '[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}'
+    )
+
+    $hits = @(
+        Select-String `
+            -LiteralPath $files.FullName `
+            -Pattern $patterns
+    )
+
+    if ($hits.Count -eq 0) {
+
+        "PASS: No matching sensitive patterns found"
+    }
+    else {
+
+        "REVIEW REQUIRED: $($hits.Count) matches"
+
+        $hits |
+            Select-Object Filename, LineNumber |
+            Sort-Object Filename, LineNumber -Unique |
+            Format-Table -AutoSize
+    }
+
+    "NOTE: Matching values are not displayed."
+PASS: No matching sensitive patterns found
+NOTE: Matching values are not displayed.
+Failed: False
+
+08. Linux Script Line Ending Verification
+
+> Get-ChildItem ".\scripts" -Filter "*.sh" -File |
+        ForEach-Object {
+
+            $bytes = [System.IO.File]::ReadAllBytes($_.FullName)
+
+            $hasBom = (
+                $bytes.Length -ge 3 -and
+                $bytes[0] -eq 239 -and
+                $bytes[1] -eq 187 -and
+                $bytes[2] -eq 191
+            )
+
+            $crCount = @(
+                $bytes | Where-Object { $_ -eq 13 }
+            ).Count
+
+            "FILE: $($_.Name)"
+            "UTF8 BOM: $hasBom"
+            "CR COUNT: $crCount"
+
+            if ($hasBom -or $crCount -gt 0) {
+                throw "Linux script encoding or line ending issue."
+            }
+
+            "PASS: UTF-8 without BOM and LF verified"
+        }
+FILE: R02_linux_file_operations.sh
+UTF8 BOM: False
+CR COUNT: 0
+PASS: UTF-8 without BOM and LF verified
+FILE: R03_linux_permissions.sh
+UTF8 BOM: False
+CR COUNT: 0
+PASS: UTF-8 without BOM and LF verified
+FILE: R06_linux_paths.sh
+UTF8 BOM: False
+CR COUNT: 0
+PASS: UTF-8 without BOM and LF verified
+Failed: False
+
+09. Git Working Tree
+
+> git status --short --branch
+## main...origin/main
+ M README.md
+?? logs/R02_linux_file_operations.txt
+?? logs/R03_linux_permissions.txt
+?? logs/R04_docker_basic_commands.txt
+?? logs/R05_docker_advanced_verification.txt
+?? logs/R06B_linux_paths_verified.txt
+?? logs/R06_git_project_paths.txt
+?? logs/R08_troubleshooting_verification.txt
+?? logs/R09_final_evidence_inventory.txt
+?? scripts/
+Failed: False
+

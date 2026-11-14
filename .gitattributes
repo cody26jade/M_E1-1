@@ -1,0 +1,7 @@
+# Preserve Linux-compatible line endings
+*.sh text eol=lf
+*.md text eol=lf
+Dockerfile text eol=lf
+
+# Preserve screenshot binary data
+*.png binary
